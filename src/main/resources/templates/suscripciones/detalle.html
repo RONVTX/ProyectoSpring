@@ -3,139 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de Suscripción</title>
+    <title>Detalle Suscripción</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <strong>SaaS Platform</strong>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/planes">Planes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/facturas">Facturas</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container py-5">
-        <h2 class="mb-4">Detalles de tu Suscripción</h2>
-
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Información de la Suscripción</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <strong>Plan Actual:</strong>
-                                <p th:text="${suscripcion.planActual.nombre}"></p>
-                            </div>
-                            <div class="col-md-6">
-                                <strong>Estado:</strong>
-                                <p>
-                                    <span th:if="${suscripcion.estado.name() == 'ACTIVA'}" class="badge bg-success">
-                                        Activa
-                                    </span>
-                                    <span th:if="${suscripcion.estado.name() == 'CANCELADA'}" class="badge bg-danger">
-                                        Cancelada
-                                    </span>
-                                    <span th:if="${suscripcion.estado.name() == 'MOROSA'}" class="badge bg-warning">
-                                        Morosa
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <strong>Fecha de Inicio:</strong>
-                                <p th:text="${#temporals.format(suscripcion.fechaInicio, 'dd/MM/yyyy')}"></p>
-                            </div>
-                            <div class="col-md-6">
-                                <strong>Próximo Pago:</strong>
-                                <p th:text="${#temporals.format(suscripcion.fechaProximoPago, 'dd/MM/yyyy')}"></p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <strong>Renovación Automática:</strong>
-                                <p th:text="${suscripcion.autoRenovar} ? 'Activada' : 'Desactivada'"></p>
-                            </div>
-                            <div class="col-md-6">
-                                <strong>Precio Mensual:</strong>
-                                <p>$<th:block th:text="${suscripcion.planActual.precioMensual}" /></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Acciones -->
-                <div class="mt-4">
-                    <a th:href="@{/suscripciones/{id}/cambiar-plan(id=${suscripcion.id})}" class="btn btn-warning">
-                        Cambiar Plan
-                    </a>
-                    <a th:href="@{/suscripciones/{id}/cancelar(id=${suscripcion.id})}" class="btn btn-danger">
-                        Cancelar Suscripción
-                    </a>
-                    <a href="/facturas" class="btn btn-info">
-                        Ver Facturas
-                    </a>
-                </div>
-            </div>
-
-            <!-- Plan Features -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0">Características del Plan</h5>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <strong>Nombre:</strong> <br>
-                                <th:block th:text="${suscripcion.planActual.nombre}" />
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Descripción:</strong> <br>
-                                <th:block th:text="${suscripcion.planActual.descripcion}" />
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Límite de Características:</strong> <br>
-                                <th:block th:text="${suscripcion.planActual.limiteFeatures}" />
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+<div class="container py-5">
+    <h2>Suscripción</h2>
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Plan:</strong> <span th:text="${suscripcion.planActual.nombre}"></span></p>
+            <p><strong>Estado:</strong> <span th:text="${suscripcion.estado}"></span></p>
+            <p><strong>Fecha próximo pago:</strong> <span th:text="${#temporals.format(suscripcion.fechaProximoPago,'dd/MM/yyyy')}"></span></p>
+            <a th:href="@{/suscripciones/{id}/cambiar-plan(id=${suscripcion.id})}" class="btn btn-primary">Cambiar Plan</a>
+            <a th:href="@{/suscripciones/{id}/cancelar(id=${suscripcion.id})}" class="btn btn-danger">Cancelar</a>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-5">
-        <div class="container text-center">
-            <p>&copy; 2026 SaaS Platform. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <a href="/suscripciones" class="btn btn-secondary mt-3">Volver</a>
+</div>
 </body>
 </html>

@@ -40,6 +40,9 @@ public class Usuario {
     @Column(name = "activo")
     private Boolean activo;
 
+    @Column(name = "pais")
+    private String pais;
+
     @PrePersist
     public void prePersist() {
         this.fechaRegistro = LocalDateTime.now();

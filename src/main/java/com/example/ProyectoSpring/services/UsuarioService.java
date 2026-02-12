@@ -40,6 +40,7 @@ public class UsuarioService {
                 .nombre(dto.getNombre())
                 .apellido(dto.getApellido())
                 .password(passwordEncoder.encode(dto.getPassword()))
+                .pais(dto.getPais() != null && !dto.getPais().isEmpty() ? dto.getPais() : "ES")
                 .build();
 
         return usuarioRepository.save(usuario);
@@ -83,3 +84,4 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 }
+

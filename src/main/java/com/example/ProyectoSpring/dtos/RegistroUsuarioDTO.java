@@ -17,13 +17,14 @@ public class RegistroUsuarioDTO {
     private String nombre;
     private String apellido;
     private String password;
-    private String passwordConfirmacion;
+    private String confirmPassword;
+    private String pais;
     
     public boolean esValido() {
         return email != null && !email.isEmpty() &&
                nombre != null && !nombre.isEmpty() &&
                apellido != null && !apellido.isEmpty() &&
                password != null && !password.isEmpty() &&
-               password.equals(passwordConfirmacion);
+               password.equals(confirmPassword);
     }
 }

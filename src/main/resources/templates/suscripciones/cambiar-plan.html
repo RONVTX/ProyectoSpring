@@ -7,82 +7,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <strong>SaaS Platform</strong>
-            </a>
+<div class="container py-5">
+    <h2>Cambiar Plan</h2>
+    <form th:action="@{/suscripciones/{id}/cambiar-plan(id=${suscripcion.id})}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Nuevo nivel</label>
+            <select name="nivel" class="form-select">
+                <option th:each="n : ${niveles}" th:value="${n}" th:text="${n}"></option>
+            </select>
         </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container py-5">
-        <h2 class="mb-4">Cambiar Plan de Suscripción</h2>
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0">Plan Actual</h5>
-                    </div>
-                    <div class="card-body">
-                        <h4 th:text="${suscripcion.planActual.nombre}"></h4>
-                        <p class="text-muted">
-                            $<th:block th:text="${suscripcion.planActual.precioMensual}" /> por mes
-                        </p>
-                        <p th:text="${suscripcion.planActual.descripcion}"></p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-warning">
-                        <h5 class="mb-0">Selecciona un Nuevo Plan</h5>
-                    </div>
-                    <div class="card-body">
-                        <!-- Error Message -->
-                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
-                            <th:block th:text="${error}" />
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-
-                        <form method="POST">
-                            <div class="mb-3">
-                                <label for="nivel" class="form-label">Plan</label>
-                                <select name="nivel" id="nivel" class="form-select" required>
-                                    <option value="">-- Selecciona un plan --</option>
-                                    <option th:each="nivel : ${niveles}" 
-                                            th:value="${nivel}"
-                                            th:text="${nivel.name()}"></option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Cambiar Plan</button>
-                            <a href="#" onclick="history.back()" class="btn btn-secondary w-100 mt-2">Cancelar</a>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Información importante -->
-        <div class="alert alert-info mt-4">
-            <h5>Información importante:</h5>
-            <ul>
-                <li>Si cambias a un plan más caro, se cobrará un prorrateo por los días restantes.</li>
-                <li>Si cambias a un plan más barato, el cambio entrará en vigor en tu próximo ciclo de facturación.</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-5">
-        <div class="container text-center">
-            <p>&copy; 2026 SaaS Platform. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <button class="btn btn-primary">Confirmar cambio</button>
+    </form>
+    <a th:href="@{/suscripciones/{id}(id=${suscripcion.id})}" class="btn btn-secondary mt-3">Volver</a>
+</div>
 </body>
 </html>

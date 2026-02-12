@@ -45,6 +45,12 @@ public class Factura {
     @Column(name = "monto_prorrateo")
     private BigDecimal montoProrrateo;
 
+    @Column(name = "tasa_impuesto")
+    private BigDecimal tasaImpuesto;
+
+    @Column(name = "monto_impuesto")
+    private BigDecimal montoImpuesto;
+
     @Column(name = "monto_total", nullable = false)
     private BigDecimal montoTotal;
 

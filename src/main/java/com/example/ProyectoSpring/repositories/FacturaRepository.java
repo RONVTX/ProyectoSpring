@@ -10,9 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repositorio para la entidad Factura
- */
 @Repository
 public interface FacturaRepository extends JpaRepository<Factura, Long> {
     Optional<Factura> findByNumeroFactura(String numeroFactura);
@@ -24,4 +21,12 @@ public interface FacturaRepository extends JpaRepository<Factura, Long> {
     List<Factura> findByUsuarioAndEstado(Usuario usuario, EstadoFactura estado);
     
     List<Factura> findByEstadoAndFechaVencimientoBefore(EstadoFactura estado, LocalDateTime fecha);
+
+    List<Factura> findByFechaEmisionBetween(LocalDateTime desde, LocalDateTime hasta);
+
+    List<Factura> findByMontoTotalBetween(java.math.BigDecimal desde, java.math.BigDecimal hasta);
+
+    List<Factura> findByMontoTotalGreaterThanEqual(java.math.BigDecimal desde);
+
+    List<Factura> findByMontoTotalLessThanEqual(java.math.BigDecimal hasta);
 }
