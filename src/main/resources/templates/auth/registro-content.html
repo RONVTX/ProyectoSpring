@@ -1,4 +1,4 @@
-<div class="container py-5">
+<div class="container py-5" th:fragment="content">
     <h2>Registro de usuario</h2>
     <form th:action="@{/registro}" method="post" th:object="${registroDTO}">
         <div class="mb-3">
