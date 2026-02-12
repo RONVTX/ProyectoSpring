@@ -5,14 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex: 1;
+        }
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+    </style>
 </head>
 <body>
-<div class="container py-5">
-    <h2>Bienvenido, <span th:text="${usuario.nombre}"></span></h2>
-    <p>Correo: <span th:text="${usuario.email}"></span></p>
-    <a href="/planes" class="btn btn-primary">Ver Planes</a>
-    <a href="/suscripciones" class="btn btn-secondary">Mis Suscripciones</a>
-    <a href="/facturas" class="btn btn-info">Facturación</a>
-</div>
+    <!-- Navbar -->
+    <nav th:replace="fragments/navbar :: nav"></nav>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        <h2>Bienvenido, <span th:text="${usuario.nombre}"></span></h2>
+        <p>Correo: <span th:text="${usuario.email}"></span></p>
+        <div class="mt-4">
+            <a href="/planes" class="btn btn-primary">Ver Planes</a>
+            <a href="/suscripciones" class="btn btn-secondary">Mis Suscripciones</a>
+            <a href="/facturas" class="btn btn-info">Facturación</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
