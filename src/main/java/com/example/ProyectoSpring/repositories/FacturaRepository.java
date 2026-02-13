@@ -1,6 +1,7 @@
 package com.example.ProyectoSpring.repositories;
 
 import com.example.ProyectoSpring.entities.Factura;
+import com.example.ProyectoSpring.entities.Suscripcion;
 import com.example.ProyectoSpring.entities.Usuario;
 import com.example.ProyectoSpring.enums.EstadoFactura;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,4 +30,6 @@ public interface FacturaRepository extends JpaRepository<Factura, Long> {
     List<Factura> findByMontoTotalGreaterThanEqual(java.math.BigDecimal desde);
 
     List<Factura> findByMontoTotalLessThanEqual(java.math.BigDecimal hasta);
+    
+    List<Factura> findBySuscripcionAndEstado(Suscripcion suscripcion, EstadoFactura estado);
 }

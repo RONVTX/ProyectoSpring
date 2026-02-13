@@ -98,6 +98,9 @@ public class SuscripcionService {
             throw new IllegalArgumentException("Solo se puede cambiar el plan de una suscripción activa");
         }
 
+        // Cancelar las facturas pendientes de la suscripción anterior
+        facturaService.cancelarFacturasPendientesDeSuscripcion(suscripcion);
+
         Plan planAnterior = suscripcion.getPlanActual();
         Plan planNuevo = planRepository.findByNivel(nuevoNivel)
                 .orElseThrow(() -> new IllegalArgumentException("Plan no encontrado"));

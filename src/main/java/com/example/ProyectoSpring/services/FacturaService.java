@@ -192,4 +192,16 @@ public class FacturaService {
                 .filter(f -> f.getFechaVencimiento() != null && f.getFechaVencimiento().isBefore(LocalDateTime.now()))
                 .toList();
     }
+
+    /**
+     * Cancela todas las facturas pendientes de una suscripción
+     * Se usa cuando se cambia de plan para anular la factura anterior
+     */
+    public void cancelarFacturasPendientesDeSuscripcion(Suscripcion suscripcion) {
+        List<Factura> facturasPendientes = facturaRepository.findBySuscripcionAndEstado(suscripcion, EstadoFactura.PENDIENTE);
+        for (Factura factura : facturasPendientes) {
+            factura.setEstado(EstadoFactura.CANCELADA);
+            facturaRepository.save(factura);
+        }
+    }
 }
