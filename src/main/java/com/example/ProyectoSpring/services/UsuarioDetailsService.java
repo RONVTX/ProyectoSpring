@@ -36,6 +36,11 @@ public class UsuarioDetailsService implements UserDetailsService {
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        
+        // Si es admin, agregar el rol ADMIN
+        if (usuario.getIsAdmin() != null && usuario.getIsAdmin()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
 
         return User.builder()
             .username(usuario.getEmail())

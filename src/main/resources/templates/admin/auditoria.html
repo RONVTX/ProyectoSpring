@@ -2,26 +2,106 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Auditoría</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría - Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="container py-5">
-    <h2>Panel de Auditoría</h2>
+    <nav th:replace="fragments/navbar :: nav"></nav>
 
-    <h4 class="mt-4">Revisiones Facturas (raw)</h4>
-    <div class="list-group">
-        <div th:each="r : ${revisionesFacturas}" class="list-group-item">
-            <pre th:text="${r}"></pre>
+    <div class="container py-5">
+        <h1 class="mb-4">Panel de Auditoría</h1>
+
+        <!-- Sección Facturas -->
+        <div class="card mb-5">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Facturas Registradas</h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${facturas.isEmpty()}" class="alert alert-info">
+                    No hay facturas registradas
+                </div>
+                <table th:unless="${facturas.isEmpty()}" class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Número</th>
+                            <th>Usuario</th>
+                            <th>Plan</th>
+                            <th>Monto Base</th>
+                            <th>Impuesto</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Emisión</th>
+                            <th>Vencimiento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="factura : ${facturas}">
+                            <td><strong th:text="${factura.numeroFactura}"></strong></td>
+                            <td th:text="${factura.usuario?.email}"></td>
+                            <td th:text="${factura.plan?.nombre}"></td>
+                            <td th:text="${'$' + #numbers.formatDecimal(factura.montoBase, 1, 2)}"></td>
+                            <td th:text="${'$' + #numbers.formatDecimal(factura.montoImpuesto, 1, 2)}"></td>
+                            <td><strong th:text="${'$' + #numbers.formatDecimal(factura.montoTotal, 1, 2)}"></strong></td>
+                            <td>
+                                <span th:class="'badge ' + ${factura.estado == 'PAGADA' ? 'bg-success' : factura.estado == 'PENDIENTE' ? 'bg-warning' : 'bg-secondary'}"
+                                      th:text="${factura.estado}"></span>
+                            </td>
+                            <td th:text="${#temporals.format(factura.fechaEmision, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td th:text="${#temporals.format(factura.fechaVencimiento, 'dd/MM/yyyy')}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sección Suscripciones -->
+        <div class="card mb-5">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Suscripciones Registradas</h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${suscripciones.isEmpty()}" class="alert alert-info">
+                    No hay suscripciones registradas
+                </div>
+                <table th:unless="${suscripciones.isEmpty()}" class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Plan Actual</th>
+                            <th>Estado</th>
+                            <th>Auto-Renovar</th>
+                            <th>Próximo Pago</th>
+                            <th>Fecha Inicio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="suscripcion : ${suscripciones}">
+                            <td><strong th:text="${suscripcion.id}"></strong></td>
+                            <td th:text="${suscripcion.usuario?.email}"></td>
+                            <td th:text="${suscripcion.planActual?.nombre}"></td>
+                            <td>
+                                <span th:class="'badge ' + ${suscripcion.estado == 'ACTIVA' ? 'bg-success' : suscripcion.estado == 'CANCELADA' ? 'bg-danger' : 'bg-secondary'}"
+                                      th:text="${suscripcion.estado}"></span>
+                            </td>
+                            <td>
+                                <span th:class="'badge ' + ${suscripcion.autoRenovar ? 'bg-info' : 'bg-secondary'}"
+                                      th:text="${suscripcion.autoRenovar ? 'Sí' : 'No'}"></span>
+                            </td>
+                            <td th:text="${#temporals.format(suscripcion.fechaProximoPago, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${#temporals.format(suscripcion.fechaInicio, 'dd/MM/yyyy')}"></td>
+                            <td>
+                                <a th:href="@{/suscripciones/{id}(id=${suscripcion.id})}" class="btn btn-sm btn-primary">Ver</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <h4 class="mt-4">Revisiones Suscripciones (raw)</h4>
-    <div class="list-group">
-        <div th:each="r : ${revisionesSuscripciones}" class="list-group-item">
-            <pre th:text="${r}"></pre>
-        </div>
-    </div>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

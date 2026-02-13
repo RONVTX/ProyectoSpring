@@ -43,9 +43,15 @@ public class Usuario {
     @Column(name = "pais")
     private String pais;
 
+    @Column(name = "is_admin")
+    private Boolean isAdmin;
+
     @PrePersist
     public void prePersist() {
         this.fechaRegistro = LocalDateTime.now();
         this.activo = true;
+        if (this.isAdmin == null) {
+            this.isAdmin = false;
+        }
     }
 }

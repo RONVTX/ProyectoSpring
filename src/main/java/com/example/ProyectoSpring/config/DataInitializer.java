@@ -62,6 +62,7 @@ public class DataInitializer implements CommandLineRunner {
                     .apellido("Usuario")
                     .password(passwordEncoder.encode("password"))
                     .pais("ES")
+                    .isAdmin(false)
                     .build();
             usuarioRepository.save(u);
             log.info("Usuario de prueba creado: {} / password=password", emailPrueba);
@@ -73,6 +74,21 @@ public class DataInitializer implements CommandLineRunner {
             } catch (Exception ex) {
                 log.warn("No se pudo crear suscripción de prueba: {}", ex.getMessage());
             }
+        }
+
+        // Crear usuario ADMIN si no existe
+        String emailAdmin = "admin@local";
+        if (!usuarioRepository.existsByEmail(emailAdmin)) {
+            Usuario admin = Usuario.builder()
+                    .email(emailAdmin)
+                    .nombre("Admin")
+                    .apellido("Sistema")
+                    .password(passwordEncoder.encode("admin123"))
+                    .pais("ES")
+                    .isAdmin(true)
+                    .build();
+            usuarioRepository.save(admin);
+            log.info("✅ USUARIO ADMIN CREADO - Email: {} / Contraseña: admin123", emailAdmin);
         }
     }
 }

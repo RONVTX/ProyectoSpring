@@ -1,5 +1,9 @@
 package com.example.ProyectoSpring.controllers;
 
+import com.example.ProyectoSpring.entities.Factura;
+import com.example.ProyectoSpring.entities.Suscripcion;
+import com.example.ProyectoSpring.repositories.FacturaRepository;
+import com.example.ProyectoSpring.repositories.SuscripcionRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReader;
@@ -20,24 +24,19 @@ import java.util.List;
 public class AdminController {
 
     private final EntityManager entityManager;
+    private final FacturaRepository facturaRepository;
+    private final SuscripcionRepository suscripcionRepository;
 
     @GetMapping("/auditoria")
     public String verAuditoria(Model model) {
-        AuditReader reader = AuditReaderFactory.get(entityManager);
-
-        // Obtener últimas revisiones de las entidades Factura y Suscripcion
-        List<?> revisionesFacturas = reader.createQuery()
-                .forRevisionsOfEntity(com.example.ProyectoSpring.entities.Factura.class, false, true)
-                .setMaxResults(50)
-                .getResultList();
-
-        List<?> revisionesSuscripciones = reader.createQuery()
-                .forRevisionsOfEntity(com.example.ProyectoSpring.entities.Suscripcion.class, false, true)
-                .setMaxResults(50)
-                .getResultList();
-
-        model.addAttribute("revisionesFacturas", revisionesFacturas);
-        model.addAttribute("revisionesSuscripciones", revisionesSuscripciones);
+        // Obtener todas las facturas
+        List<Factura> facturas = facturaRepository.findAll();
+        
+        // Obtener todas las suscripciones
+        List<Suscripcion> suscripciones = suscripcionRepository.findAll();
+        
+        model.addAttribute("facturas", facturas);
+        model.addAttribute("suscripciones", suscripciones);
         return "admin/auditoria";
     }
 }
