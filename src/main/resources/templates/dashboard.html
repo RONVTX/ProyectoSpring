@@ -28,12 +28,66 @@
 
     <!-- Main Content -->
     <main class="container py-5">
-        <h2>Bienvenido, <span th:text="${usuario.nombre}"></span></h2>
-        <p>Correo: <span th:text="${usuario.email}"></span></p>
-        <div class="mt-4">
-            <a href="/planes" class="btn btn-primary">Ver Planes</a>
-            <a href="/suscripciones" class="btn btn-secondary">Mis Suscripciones</a>
-            <a href="/facturas" class="btn btn-info">Facturación</a>
+        <div class="text-center mb-5">
+            <h1 class="display-4">Bienvenido a ProyectoSpring</h1>
+            <p class="lead">Tu plataforma de suscripciones y gestión de servicios</p>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Planes Flexibles</h5>
+                        <p class="card-text">Elige el plan que mejor se adapte a tus necesidades. Desde opciones básicas hasta premium con todas las funcionalidades.</p>
+                        <a href="/planes" class="btn btn-primary">Ver Planes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Gestión de Suscripciones</h5>
+                        <p class="card-text">Administra todas tus suscripciones desde un solo lugar. Cambia, cancela o renueva con facilidad.</p>
+                        <a href="/suscripciones" class="btn btn-secondary">Mis Suscripciones</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Facturación Transparente</h5>
+                        <p class="card-text">Revisa tus facturas, historial de pagos y estados de cuenta de manera clara y organizada.</p>
+                        <a href="/facturas" class="btn btn-info">Ver Facturas</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">¿Por qué elegirnos?</h5>
+                        <ul class="list-unstyled">
+                            <li>✓ Planes personalizados para cada necesidad</li>
+                            <li>✓ Soporte 24/7</li>
+                            <li>✓ Seguridad garantizada</li>
+                            <li>✓ Fácil gestión desde cualquier dispositivo</li>
+                            <li>✓ Renovaciones automáticas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Información Adicional</h5>
+                        <p>Accede a tu perfil para gestionar tu información personal y preferencias.</p>
+                        <p>Si eres administrador, tienes acceso a herramientas de auditoría y gestión avanzada.</p>
+                        <a href="/usuarios/perfil" class="btn btn-outline-primary">Ir a Mi Perfil</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 

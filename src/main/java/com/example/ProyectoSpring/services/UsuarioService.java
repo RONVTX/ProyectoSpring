@@ -83,5 +83,15 @@ public class UsuarioService {
         usuario.setActivo(false);
         return usuarioRepository.save(usuario);
     }
+
+    /**
+     * Elimina un usuario permanentemente
+     */
+    public void eliminarUsuario(Long id) {
+        if (!usuarioRepository.existsById(id)) {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
+        usuarioRepository.deleteById(id);
+    }
 }
 
