@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Suscripción</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav th:replace="fragments/navbar :: nav"></nav>
+    <div class="container py-5">
+        <h2>Detalle de Suscripción</h2>
+        <div class="card">
+            <div class="card-body">
+                <p><strong>ID:</strong> <span th:text="${suscripcion.id}"></span></p>
+                <p><strong>Usuario:</strong> <span th:text="${suscripcion.usuario.email}"></span></p>
+                <p><strong>Plan:</strong> <span th:text="${suscripcion.planActual.nombre}"></span></p>
+                <p><strong>Estado:</strong> <span th:text="${suscripcion.estado}"></span></p>
+                <p><strong>Fecha Inicio:</strong> <span th:text="${#temporals.format(suscripcion.fechaInicio,'dd/MM/yyyy')}"></span></p>
+                <p><strong>Fecha Cancelación:</strong> <span th:text="${#temporals.format(suscripcion.fechaCancelacion,'dd/MM/yyyy')}"></span></p>
+                <p><strong>Próximo Pago:</strong> <span th:text="${#temporals.format(suscripcion.fechaProximoPago,'dd/MM/yyyy')}"></span></p>
+                <a th:href="@{'/admin/auditoria/suscripciones/' + ${suscripcion.id} + '/editar'}" class="btn btn-warning">Editar</a>
+                <form th:action="@{'/admin/auditoria/suscripciones/' + ${suscripcion.id} + '/eliminar'}" method="post" style="display:inline;">
+                    <button class="btn btn-danger" onclick="return confirm('¿Eliminar suscripción?')">Eliminar</button>
+                </form>
+            </div>
+        </div>
+        <a href="/admin/auditoria/suscripciones" class="btn btn-secondary mt-3">Volver</a>
+    </div>
+    <div th:replace="fragments/footer :: footer"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

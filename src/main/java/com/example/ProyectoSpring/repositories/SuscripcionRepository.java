@@ -18,11 +18,12 @@ import java.util.Optional;
 @Repository
 public interface SuscripcionRepository extends JpaRepository<Suscripcion, Long> {
     Optional<Suscripcion> findByUsuarioAndEstado(Usuario usuario, EstadoSuscripcion estado);
-    
     List<Suscripcion> findByEstado(EstadoSuscripcion estado);
-    
     List<Suscripcion> findByUsuario(Usuario usuario);
-    
     @Query("SELECT s FROM Suscripcion s WHERE s.estado = :estado AND s.fechaProximoPago <= :fecha")
     List<Suscripcion> findSuscripcionesParaRenovar(@Param("estado") EstadoSuscripcion estado, @Param("fecha") LocalDateTime fecha);
+
+    // Para historial de suscripción
+    @Query("SELECT s FROM Suscripcion s WHERE s.usuario.id = :usuarioId ORDER BY s.fechaInicio DESC")
+    List<Suscripcion> findByUsuarioId(@Param("usuarioId") Long usuarioId);
 }
