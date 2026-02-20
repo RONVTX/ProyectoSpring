@@ -37,6 +37,10 @@ public class SuscripcionService {
         Plan plan = planRepository.findByNivel(nivelPlan)
                 .orElseThrow(() -> new IllegalArgumentException("Plan no encontrado"));
 
+        if (!plan.getActivo()) {
+            throw new IllegalArgumentException("Plan no encontrado");
+        }
+
         // Verificar que no tenga una suscripción activa
         Optional<Suscripcion> suscripcionExistente = suscripcionRepository
                 .findByUsuarioAndEstado(usuario, EstadoSuscripcion.ACTIVA);
