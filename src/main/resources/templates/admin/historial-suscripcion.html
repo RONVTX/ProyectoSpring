@@ -2,41 +2,75 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial de Suscripciones</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <div th:replace="~{fragments/styles :: modern-styles}"></div>
 </head>
-<body>
-    <nav th:replace="fragments/navbar :: nav"></nav>
-    <div class="container py-5">
-        <h2>Historial de Suscripciones</h2>
-        <div th:if="${historial.isEmpty()}">
-            <div class="alert alert-info">No hay historial de suscripciones para este usuario.</div>
+<body class="dark-theme">
+    <nav th:replace="~{fragments/navbar :: nav}"></nav>
+
+    <main class="modern-container">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h1 class="page-title">Historial de Suscripciones</h1>
+                <p class="page-subtitle">Registro completo de suscripciones del usuario</p>
+            </div>
+
+            <div th:if="${historial.isEmpty()}" class="empty-state">
+                <div class="empty-state-content">
+                    <div class="empty-icon">📋</div>
+                    <h3>No hay historial</h3>
+                    <p>Este usuario no tiene suscripciones registradas en el historial.</p>
+                </div>
+            </div>
+
+            <div th:unless="${historial.isEmpty()}" class="modern-card">
+                <div class="card-header">
+                    <h3 class="card-title">📊 Historial Completo</h3>
+                </div>
+                <div class="card-content">
+                    <div class="modern-table-container">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Plan</th>
+                                    <th>Estado</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Cancelación</th>
+                                    <th>Próximo Pago</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="s : ${historial}">
+                                    <td th:text="${s.id}"></td>
+                                    <td th:text="${s.planActual.nombre}"></td>
+                                    <td>
+                                        <span class="status-badge" th:classappend="${s.estado == 'ACTIVA' ? 'status-active' : 'status-inactive'}" th:text="${s.estado}"></span>
+                                    </td>
+                                    <td th:text="${#temporals.format(s.fechaInicio,'dd/MM/yyyy')}"></td>
+                                    <td th:text="${s.fechaCancelacion != null ? #temporals.format(s.fechaCancelacion,'dd/MM/yyyy') : 'N/A'}"></td>
+                                    <td th:text="${#temporals.format(s.fechaProximoPago,'dd/MM/yyyy')}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="/admin/auditoria" class="btn-secondary">← Volver a Auditoría</a>
+            </div>
         </div>
-        <table th:unless="${historial.isEmpty()}" class="table table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Plan</th>
-                    <th>Estado</th>
-                    <th>Fecha Inicio</th>
-                    <th>Fecha Cancelación</th>
-                    <th>Próximo Pago</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="s : ${historial}">
-                    <td th:text="${s.id}"></td>
-                    <td th:text="${s.planActual.nombre}"></td>
-                    <td th:text="${s.estado}"></td>
-                    <td th:text="${#temporals.format(s.fechaInicio,'dd/MM/yyyy')}"></td>
-                    <td th:text="${#temporals.format(s.fechaCancelacion,'dd/MM/yyyy')}"></td>
-                    <td th:text="${#temporals.format(s.fechaProximoPago,'dd/MM/yyyy')}"></td>
-                </tr>
-            </tbody>
-        </table>
-        <a href="/admin/auditoria" class="btn btn-secondary mt-3">Volver</a>
-    </div>
-    <div th:replace="fragments/footer :: footer"></div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
+
+
+
+

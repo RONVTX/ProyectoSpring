@@ -3,31 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Suscripciones</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Mis Suscripciones — ProyectoSpring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <div th:replace="~{fragments/styles :: modern-styles}"></div>
 </head>
 <body>
-    <nav th:replace="fragments/navbar :: nav"></nav>
+    <nav th:replace="~{fragments/navbar :: nav}"></nav>
 
-    <main class="container py-5">
-        <h2>Mis Suscripciones</h2>
-        <div th:if="${suscripciones.isEmpty()}">
-            <div class="alert alert-info">No tienes suscripciones.</div>
+    <main>
+        <div class="text-center mb-4">
+            <h1>Mis Suscripciones</h1>
+            <p>Gestiona todas tus suscripciones desde un solo lugar</p>
         </div>
-        <div class="list-group">
-            <a th:each="s : ${suscripciones}" th:href="@{/suscripciones/{id}(id=${s.id})}" class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1" th:text="${s.planActual.nombre}"></h5>
-                    <small th:text="${s.estado}"></small>
+
+        <div th:if="${suscripciones.isEmpty()}" class="alert alert-info text-center">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">=(</div>
+            <h3>No tienes suscripciones activas</h3>
+            <p>¡Es hora de elegir un plan perfecto para ti!</p>
+            <a href="/planes" class="btn btn-primary">Ver Planes Disponibles →</a>
+        </div>
+
+        <div th:if="${!suscripciones.isEmpty()}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+            <div th:each="s : ${suscripciones}" class="card" style="--card-accent: var(--accent2);">
+               
+                <h3 th:text="${s.planActual.nombre}" class="card-title"></h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 0;">
+                    <span style="font-size: 1.2rem; font-weight: 600; color: var(--accent);">
+                        $<span th:text="${#numbers.formatDecimal(s.planActual.precioMensual,1,2)}"></span><small style="font-size: 0.8rem; color: var(--muted);">/mes</small>
+                    </span>
+                    <span th:class="'badge ' + (${s.estado == 'ACTIVA'} ? 'badge-success' : 'badge-warning')" style="
+                        padding: 0.25rem 0.75rem;
+                        border-radius: 20px;
+                        font-size: 0.75rem;
+                        font-weight: 500;
+                        text-transform: uppercase;
+                        letter-spacing: 0.05em;
+                    " th:text="${s.estado}"></span>
                 </div>
-                <p class="mb-1">Próximo pago: <span th:text="${#temporals.format(s.fechaProximoPago,'dd/MM/yyyy')}"></span></p>
-            </a>
+                <p class="card-text">
+                    Próximo pago: <strong th:text="${#temporals.format(s.fechaProximoPago,'dd/MM/yyyy')}"></strong>
+                </p>
+                <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                    <a th:href="@{/suscripciones/{id}(id=${s.id})}" class="btn btn-primary">Ver Detalles</a>
+                    <a th:href="@{/suscripciones/{id}/cambiar-plan(id=${s.id})}" class="btn btn-outline">Cambiar Plan</a>
+                </div>
+            </div>
         </div>
     </main>
 
-    <div th:replace="fragments/footer :: footer"></div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
+
+
+
+

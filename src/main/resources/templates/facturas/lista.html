@@ -3,89 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facturas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Facturas — ProyectoSpring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <div th:replace="~{fragments/styles :: modern-styles}"></div>
 </head>
 <body>
-    <nav th:replace="fragments/navbar :: nav"></nav>
+    <nav th:replace="~{fragments/navbar :: nav}"></nav>
 
-    <div class="container py-5">
-        <h2 class="mb-4" th:text="${titulo} ?: 'Facturas'"></h2>
+    <main>
+        <div class="text-center mb-4">
+            <h1 th:text="${titulo} ?: 'Mis Facturas'"></h1>
+            <p>Revisa tu historial de facturas y pagos</p>
+        </div>
 
-        <form class="row g-2 mb-3" method="get" action="/facturas">
-            <div class="col-auto">
-                <input type="date" name="desde" class="form-control" />
+        <!-- Filtros -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title" style="margin: 0;">Filtrar Facturas</h3>
             </div>
-            <div class="col-auto">
-                <input type="date" name="hasta" class="form-control" />
+            <div style="padding: 1.5rem;">
+                <form style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; align-items: end;" method="get" action="/facturas">
+                    <div class="form-group">
+                        <label class="form-label">Desde</label>
+                        <input type="date" name="desde" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Hasta</label>
+                        <input type="date" name="hasta" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Monto Mínimo</label>
+                        <input type="number" step="0.01" name="minMonto" class="form-control" placeholder="0.00" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Monto Máximo</label>
+                        <input type="number" step="0.01" name="maxMonto" class="form-control" placeholder="999.99" />
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" style="height: fit-content;">Aplicar Filtros</button>
+                    </div>
+                </form>
             </div>
-            <div class="col-auto">
-                <input type="number" step="0.01" name="minMonto" class="form-control" placeholder="Min monto" />
-            </div>
-            <div class="col-auto">
-                <input type="number" step="0.01" name="maxMonto" class="form-control" placeholder="Max monto" />
-            </div>
-            <div class="col-auto">
-                <button class="btn btn-primary">Filtrar</button>
-            </div>
-        </form>
+        </div>
 
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Número</th>
-                        <th>Usuario</th>
-                        <th>Plan</th>
-                        <th>Monto Base</th>
-                        <th>Prorrateo</th>
-                        <th>Tasa Impuesto</th>
-                        <th>Monto Impuesto</th>
-                        <th>Total (con impuesto)</th>
-                        <th>Estado</th>
-                        <th>Fecha Emisión</th>
-                        <th>Vencimiento</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="factura : ${facturas}">
-                        <td th:text="${factura.numeroFactura}"></td>
-                        <td th:text="${factura.usuario.email}"></td>
-                        <td th:text="${factura.plan.nombre}"></td>
-                        <td>$<th:block th:text="${#numbers.formatDecimal(factura.montoBase, 1, 2)}" /></td>
-                        <td>$<th:block th:text="${#numbers.formatDecimal(factura.montoProrrateo, 1, 2)}" /></td>
-                        <td th:text="${#numbers.formatDecimal(factura.tasaImpuesto.multiply(100), 1, 2)} + '%'" />
-                        <td>$<th:block th:text="${#numbers.formatDecimal(factura.montoImpuesto, 1, 2)}" /></td>
-                        <td><strong>$<th:block th:text="${#numbers.formatDecimal(factura.montoTotal, 1, 2)}" /></strong></td>
-                        <td>
-                            <span th:if="${factura.estado.name() == 'PENDIENTE'}" class="badge bg-warning">Pendiente</span>
-                            <span th:if="${factura.estado.name() == 'PAGADA'}" class="badge bg-success">Pagada</span>
-                            <span th:if="${factura.estado.name() == 'VENCIDA'}" class="badge bg-danger">Vencida</span>
-                            <span th:if="${factura.estado.name() == 'CANCELADA'}" class="badge bg-secondary">Cancelada</span>
-                        </td>
-                        <td th:text="${#temporals.format(factura.fechaEmision, 'dd/MM/yyyy')}"></td>
-                        <td th:text="${#temporals.format(factura.fechaVencimiento, 'dd/MM/yyyy')}"></td>
-                        <td>
-                            <a th:href="@{/facturas/{id}(id=${factura.id})}" class="btn btn-sm btn-info">Ver</a>
-                            <th:block th:if="${factura.estado.name() == 'PENDIENTE'}">
-                                <form th:action="@{/facturas/{id}/pagar(id=${factura.id})}" method="POST" style="display: inline;">
-                                    <button type="submit" class="btn btn-sm btn-success">Pagar</button>
-                                </form>
-                            </th:block>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- Tabla de Facturas -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title" style="margin: 0;">Historial de Facturas</h3>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Usuario</th>
+                            <th>Plan</th>
+                            <th>Monto Base</th>
+                            <th>Prorrateo</th>
+                            <th>Impuesto</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Emisión</th>
+                            <th>Vencimiento</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="factura : ${facturas}">
+                            <td><code th:text="${factura.numeroFactura}" style="background: var(--surface2); padding: 0.25rem 0.5rem; border-radius: 4px;"></code></td>
+                            <td th:text="${factura.usuario.email}"></td>
+                            <td th:text="${factura.plan.nombre}"></td>
+                            <td style="font-weight: 600; color: var(--accent);">$<span th:text="${#numbers.formatDecimal(factura.montoBase, 1, 2)}"></span></td>
+                            <td>$<span th:text="${#numbers.formatDecimal(factura.montoProrrateo, 1, 2)}"></span></td>
+                            <td><span th:text="${#numbers.formatDecimal(factura.tasaImpuesto.multiply(100), 1, 1)}"></span>%</td>
+                            <td>$<span th:text="${#numbers.formatDecimal(factura.montoImpuesto, 1, 2)}"></span></td>
+                            <td style="font-weight: 700; font-size: 1.1rem; color: var(--success);">$<span th:text="${#numbers.formatDecimal(factura.montoTotal, 1, 2)}"></span></td>
+                            <td>
+                                <span th:if="${factura.estado.name() == 'PENDIENTE'}" style="background: rgba(245,158,11,0.2); color: var(--warning); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500;">Pendiente</span>
+                                <span th:if="${factura.estado.name() == 'PAGADA'}" style="background: rgba(16,185,129,0.2); color: var(--success); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500;">Pagada</span>
+                                <span th:if="${factura.estado.name() == 'VENCIDA'}" style="background: rgba(239,68,68,0.2); color: var(--danger); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500;">Vencida</span>
+                                <span th:if="${factura.estado.name() == 'CANCELADA'}" style="background: rgba(107,114,128,0.2); color: var(--muted); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500;">Cancelada</span>
+                            </td>
+                            <td th:text="${#temporals.format(factura.fechaEmision, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${#temporals.format(factura.fechaVencimiento, 'dd/MM/yyyy')}"></td>
+                            <td>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <a th:href="@{/facturas/{id}(id=${factura.id})}" class="btn btn-outline" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">Ver</a>
+                                    <th:block th:if="${factura.estado.name() == 'PENDIENTE'}">
+                                        <form th:action="@{/facturas/{id}/pagar(id=${factura.id})}" method="POST" style="display: inline;">
+                                            <button type="submit" class="btn btn-success" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">Pagar</button>
+                                        </form>
+                                    </th:block>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div th:if="${facturas.isEmpty()}" class="alert alert-info text-center">
-            No hay facturas disponibles.
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🧾</div>
+            <h3>No hay facturas disponibles</h3>
+            <p>No se encontraron facturas con los criterios de búsqueda.</p>
         </div>
-    </div>
+    </main>
 
-    <div th:replace="fragments/footer :: footer"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
+
+
+
+

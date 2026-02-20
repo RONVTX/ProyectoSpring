@@ -2,31 +2,93 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle Suscripción</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <div th:replace="~{fragments/styles :: modern-styles}"></div>
 </head>
-<body>
-    <nav th:replace="fragments/navbar :: nav"></nav>
-    <div class="container py-5">
-        <h2>Detalle de Suscripción</h2>
-        <div class="card">
-            <div class="card-body">
-                <p><strong>ID:</strong> <span th:text="${suscripcion.id}"></span></p>
-                <p><strong>Usuario:</strong> <span th:text="${suscripcion.usuario.email}"></span></p>
-                <p><strong>Plan:</strong> <span th:text="${suscripcion.planActual.nombre}"></span></p>
-                <p><strong>Estado:</strong> <span th:text="${suscripcion.estado}"></span></p>
-                <p><strong>Fecha Inicio:</strong> <span th:text="${#temporals.format(suscripcion.fechaInicio,'dd/MM/yyyy')}"></span></p>
-                <p><strong>Fecha Cancelación:</strong> <span th:text="${#temporals.format(suscripcion.fechaCancelacion,'dd/MM/yyyy')}"></span></p>
-                <p><strong>Próximo Pago:</strong> <span th:text="${#temporals.format(suscripcion.fechaProximoPago,'dd/MM/yyyy')}"></span></p>
-                <a th:href="@{'/admin/auditoria/suscripciones/' + ${suscripcion.id} + '/editar'}" class="btn btn-warning">Editar</a>
-                <form th:action="@{'/admin/auditoria/suscripciones/' + ${suscripcion.id} + '/eliminar'}" method="post" style="display:inline;">
-                    <button class="btn btn-danger" onclick="return confirm('¿Eliminar suscripción?')">Eliminar</button>
-                </form>
+<body class="dark-theme">
+    <nav th:replace="~{fragments/navbar :: nav}"></nav>
+
+    <main class="modern-container">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h1 class="page-title">Detalle de Suscripción</h1>
+                <p class="page-subtitle">ID: <span th:text="${suscripcion.id}"></span></p>
+            </div>
+
+            <div class="subscription-details-grid">
+                <div class="modern-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Información del Usuario</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Usuario</span>
+                                <span class="info-value" th:text="${suscripcion.usuario.email}"></span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Plan Actual</span>
+                                <span class="info-value" th:text="${suscripcion.planActual.nombre}"></span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Estado</span>
+                                <span class="info-value status-badge" th:classappend="${suscripcion.estado == 'ACTIVA' ? 'status-active' : 'status-inactive'}" th:text="${suscripcion.estado}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modern-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Fechas Importantes</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Fecha de Inicio</span>
+                                <span class="info-value" th:text="${#temporals.format(suscripcion.fechaInicio,'dd/MM/yyyy')}"></span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Fecha de Cancelación</span>
+                                <span class="info-value" th:text="${suscripcion.fechaCancelacion != null ? #temporals.format(suscripcion.fechaCancelacion,'dd/MM/yyyy') : 'N/A'}"></span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Próximo Pago</span>
+                                <span class="info-value" th:text="${#temporals.format(suscripcion.fechaProximoPago,'dd/MM/yyyy')}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modern-card">
+                <div class="card-header">
+                    <h3 class="card-title">Acciones Administrativas</h3>
+                </div>
+                <div class="card-content">
+                    <div class="admin-actions">
+                        <a th:href="@{'/admin/auditoria/suscripciones/' + ${suscripcion.id} + '/editar'}" class="btn btn-warning">Editar Suscripción</a>
+                        <form th:action="@{'/admin/auditoria/suscripciones/' + ${suscripcion.id} + '/eliminar'}" method="post" class="inline-form" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta suscripción?')">
+                            <button type="submit" class="btn btn-danger">Eliminar Suscripción</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="/admin/auditoria/suscripciones" class="btn btn-secondary">Volver a Suscripciones</a>
             </div>
         </div>
-        <a href="/admin/auditoria/suscripciones" class="btn btn-secondary mt-3">Volver</a>
-    </div>
-    <div th:replace="fragments/footer :: footer"></div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
+
+
+
+

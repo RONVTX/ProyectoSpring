@@ -2,10 +2,13 @@ package com.example.ProyectoSpring.services;
 
 import com.example.ProyectoSpring.entities.Usuario;
 import com.example.ProyectoSpring.dtos.RegistroUsuarioDTO;
+import com.example.ProyectoSpring.repositories.FacturaRepository;
+import com.example.ProyectoSpring.repositories.SuscripcionRepository;
 import com.example.ProyectoSpring.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -19,6 +22,8 @@ import java.util.Optional;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final FacturaRepository facturaRepository;
+    private final SuscripcionRepository suscripcionRepository;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -91,6 +96,17 @@ public class UsuarioService {
         if (!usuarioRepository.existsById(id)) {
             throw new IllegalArgumentException("Usuario no encontrado");
         }
+
+        // Verificar si el usuario tiene facturas asociadas
+        if (!facturaRepository.findByUsuarioId(id).isEmpty()) {
+            throw new IllegalArgumentException("No se puede eliminar el usuario porque tiene facturas asociadas");
+        }
+
+        // Verificar si el usuario tiene suscripciones asociadas
+        if (!suscripcionRepository.findByUsuarioId(id).isEmpty()) {
+            throw new IllegalArgumentException("No se puede eliminar el usuario porque tiene suscripciones asociadas");
+        }
+
         usuarioRepository.deleteById(id);
     }
 }

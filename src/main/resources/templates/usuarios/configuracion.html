@@ -4,195 +4,200 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuración</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        main {
-            flex: 1;
-        }
-        footer {
-            background-color: #f8f9fa;
-            border-top: 1px solid #dee2e6;
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <div th:replace="~{fragments/styles :: modern-styles}"></div>
 </head>
-<body>
-    <!-- Navbar -->
-    <nav th:replace="fragments/navbar :: nav"></nav>
+<body class="dark-theme">
+    <nav th:replace="~{fragments/navbar :: nav}"></nav>
 
-    <!-- Main Content -->
-    <main class="container py-5">
-        <h2>Configuración de Cuenta</h2>
+    <main class="modern-container">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h1 class="page-title">Configuración de Cuenta</h1>
+                <p class="page-subtitle">Gestiona tu información personal y preferencias</p>
+            </div>
 
-        <!-- Mensajes de éxito/error -->
-        <div th:if="${exito}" class="alert alert-success" role="alert">
-            <span th:text="${exito}"></span>
-        </div>
-        <div th:if="${error}" class="alert alert-danger" role="alert">
-            <span th:text="${error}"></span>
-        </div>
+            <!-- Mensajes de éxito/error -->
+            <div th:if="${exito}" class="success-message">
+                <span th:text="${exito}"></span>
+            </div>
+            <div th:if="${error}" class="error-message">
+                <span th:text="${error}"></span>
+            </div>
 
-        <div class="row">
-            <!-- Información Personal -->
-            <div class="col-md-6">
-                <div class="card mb-4">
+<div class="config-sections">
+                <!-- Información Personal -->
+                <div class="modern-card">
                     <div class="card-header">
-                        <h5 class="mb-0">Información Personal</h5>
+                        <h3 class="card-title">Información Personal</h3>
                     </div>
-                    <div class="card-body">
-                        <form th:action="@{/usuarios/configuracion}" method="post" th:object="${usuarioDTO}">
+                    <div class="card-content">
+                        <form th:action="@{/usuarios/configuracion}" method="post" th:object="${usuarioDTO}" class="modern-form">
                             <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-                            <div class="mb-3">
-                                <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Nombre</label>
+                                    <input type="text" class="modern-input" th:field="*{nombre}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Apellido</label>
+                                    <input type="text" class="modern-input" th:field="*{apellido}" required>
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="apellido" class="form-label">Apellido</label>
-                                <input type="text" class="form-control" id="apellido" th:field="*{apellido}" required>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="modern-input" th:field="*{email}" required>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" th:field="*{email}" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="pais" class="form-label">País</label>
-                                <select class="form-control" id="pais" th:field="*{pais}" required>
+                            <div class="form-group">
+                                <label class="form-label">País</label>
+                                <select class="modern-select" th:field="*{pais}" required>
                                     <option value="">Seleccionar país</option>
-                                    <option value="Argentina">Argentina</option>
-                                    <option value="Chile">Chile</option>
-                                    <option value="Colombia">Colombia</option>
-                                    <option value="México">México</option>
-                                    <option value="Perú">Perú</option>
-                                    <option value="España">España</option>
-                                    <option value="Estados Unidos">Estados Unidos</option>
-                                    <option value="Otro">Otro</option>
+                                    <option value="Argentina">🇦🇷 Argentina</option>
+                                    <option value="Chile">🇨🇱 Chile</option>
+                                    <option value="Colombia">🇨🇴 Colombia</option>
+                                    <option value="México">🇲🇽 México</option>
+                                    <option value="Perú">🇵🇪 Perú</option>
+                                    <option value="España">🇪🇸 España</option>
+                                    <option value="Estados Unidos">🇺🇸 Estados Unidos</option>
+                                    <option value="Otro">🌍 Otro</option>
                                 </select>
                             </div>
 
-                            <button type="submit" name="action" value="updateProfile" class="btn btn-primary">Actualizar Información</button>
+                            <div class="form-actions">
+                                <button type="submit" name="action" value="updateProfile" class="btn btn-primary">Actualizar Información</button>
+                            </div>
                         </form>
                     </div>
                 </div>
-            </div>
 
-            <!-- Cambiar Contraseña -->
-            <div class="col-md-6">
-                <div class="card mb-4">
+                <!-- Seguridad -->
+                <div class="security-section">
+                    <!-- Cambiar Contraseña -->
+                    <div class="modern-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Cambiar Contraseña</h3>
+                        </div>
+                        <div class="card-content">
+                            <form th:action="@{/usuarios/configuracion}" method="post" class="modern-form">
+                                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                                <div class="form-group">
+                                    <label class="form-label">Contraseña Actual</label>
+                                    <input type="password" class="modern-input" name="currentPassword" required>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Nueva Contraseña</label>
+                                        <input type="password" class="modern-input" name="newPassword" required minlength="6">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Confirmar Nueva Contraseña</label>
+                                        <input type="password" class="modern-input" name="confirmPassword" required minlength="6">
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" name="action" value="changePassword" class="btn btn-primary">Cambiar Contraseña</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Preferencias -->
+                    <div class="modern-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Preferencias</h3>
+                        </div>
+                        <div class="card-content">
+                            <form th:action="@{/usuarios/configuracion}" method="post" class="modern-form">
+                                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                           
+
+                                <div class="form-group">
+                                    <label class="form-label">Idioma</label>
+                                    <select class="modern-select" name="idioma">
+                                        <option value="es">Español</option>
+                                        <option value="en">English</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" name="action" value="updatePreferences" class="btn btn-secondary">Guardar Preferencias</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zona de Peligro -->
+                <div class="modern-card danger-card">
                     <div class="card-header">
-                        <h5 class="mb-0">Cambiar Contraseña</h5>
+                        <h3 class="card-title">Eliminar Cuenta</h3>
                     </div>
-                    <div class="card-body">
-                        <form th:action="@{/usuarios/configuracion}" method="post">
-                            <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <div class="card-content">
+                        <p class="danger-text">Estas acciones no se pueden deshacer y pueden resultar en la pérdida permanente de datos.</p>
 
-                            <div class="mb-3">
-                                <label for="currentPassword" class="form-label">Contraseña Actual</label>
-                                <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="newPassword" class="form-label">Nueva Contraseña</label>
-                                <input type="password" class="form-control" id="newPassword" name="newPassword" required minlength="6">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="confirmPassword" class="form-label">Confirmar Nueva Contraseña</label>
-                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required minlength="6">
-                            </div>
-
-                            <button type="submit" name="action" value="changePassword" class="btn btn-warning">Cambiar Contraseña</button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Preferencias -->
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Preferencias</h5>
-                    </div>
-                    <div class="card-body">
-                        <form th:action="@{/usuarios/configuracion}" method="post">
-                            <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="notificaciones" name="notificaciones" checked>
-                                <label class="form-check-label" for="notificaciones">
-                                    Recibir notificaciones por email
-                                </label>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="idioma" class="form-label">Idioma</label>
-                                <select class="form-control" id="idioma" name="idioma">
-                                    <option value="es">Español</option>
-                                    <option value="en">English</option>
-                                </select>
-                            </div>
-
-                            <button type="submit" name="action" value="updatePreferences" class="btn btn-secondary">Guardar Preferencias</button>
-                        </form>
+                        <div class="danger-actions">
+                            <button type="button" class="btn btn-danger" onclick="showDeleteModal()">Eliminar Cuenta</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Zona de Peligro -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card border-danger">
-                    <div class="card-header bg-danger text-white">
-                        <h5 class="mb-0">Zona de Peligro</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="text-muted">Estas acciones no se pueden deshacer.</p>
-                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
-                            Eliminar Cuenta
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal para eliminar cuenta -->
-        <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <!-- Modal para eliminar cuenta -->
+            <div id="deleteModal" class="modal-overlay" style="display: none;">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deleteAccountModalLabel">Eliminar Cuenta</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h3 class="modal-title">Eliminar Cuenta</h3>
+                        <button type="button" class="modal-close" onclick="hideDeleteModal()">×</button>
                     </div>
                     <div class="modal-body">
-                        <p>¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer y perderás todos tus datos.</p>
-                        <form th:action="@{/usuarios/configuracion}" method="post" id="deleteForm">
+                        <p class="danger-text">¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer y perderás todos tus datos, suscripciones y facturas.</p>
+                        <form th:action="@{/usuarios/configuracion}" method="post" class="modern-form">
                             <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                            <div class="mb-3">
-                                <label for="deletePassword" class="form-label">Ingresa tu contraseña para confirmar</label>
-                                <input type="password" class="form-control" id="deletePassword" name="deletePassword" required>
+                            <div class="form-group">
+                                <label class="form-label">Ingresa tu contraseña para confirmar</label>
+                                <input type="password" class="modern-input" name="deletePassword" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="hideDeleteModal()">Cancelar</button>
+                                <button type="submit" name="action" value="deleteAccount" class="btn btn-danger">Eliminar Cuenta</button>
                             </div>
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" form="deleteForm" name="action" value="deleteAccount" class="btn btn-danger">Eliminar Cuenta</button>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function hideDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        // Cerrar modal al hacer click fuera
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideDeleteModal();
+            }
+        });
+    </script>
 </body>
 </html>
+
+
+
+

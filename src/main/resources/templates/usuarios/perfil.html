@@ -3,73 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        main {
-            flex: 1;
-        }
-        footer {
-            background-color: #f8f9fa;
-            border-top: 1px solid #dee2e6;
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
-    </style>
+    <title>Mi Perfil — ProyectoSpring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <div th:replace="~{fragments/styles :: modern-styles}"></div>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav th:replace="fragments/navbar :: nav"></nav>
+    <nav th:replace="~{fragments/navbar :: nav}"></nav>
 
-    <!-- Main Content -->
-    <main class="container py-5">
-        <h2>Mi Perfil</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Información Personal</h5>
-                        <p class="card-text"><strong>Nombre:</strong> <span th:text="${usuario.nombre}"></span></p>
-                        <p class="card-text"><strong>Apellido:</strong> <span th:text="${usuario.apellido}"></span></p>
-                        <p class="card-text"><strong>Email:</strong> <span th:text="${usuario.email}"></span></p>
-                        <p class="card-text"><strong>País:</strong> <span th:text="${usuario.pais}"></span></p>
-                        <p class="card-text"><strong>Fecha de Registro:</strong> <span th:text="${#temporals.format(usuario.fechaRegistro, 'dd/MM/yyyy HH:mm')}"></span></p>
-                        <p class="card-text"><strong>Activo:</strong> <span th:text="${usuario.activo ? 'Sí' : 'No'}"></span></p>
-                        <p class="card-text" th:if="${usuario.isAdmin}"><strong>Rol:</strong> Administrador</p>
+    <main>
+        <div class="text-center mb-4">
+            <h1>Mi Perfil</h1>
+            <p>Gestiona tu información personal y preferencias</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+            <!-- Información Personal -->
+            <div class="card">
+                <div class="card-header">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    
+                        <h3 class="card-title" style="margin: 0;">Información Personal</h3>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Bienvenido, <span th:text="${usuario.nombre}"></span></h5>
-                        <p class="card-text">Correo: <span th:text="${usuario.email}"></span></p>
-                        <div class="mt-4">
-                            <a href="/planes" class="btn btn-primary me-2">Ver Planes</a>
-                            <a href="/suscripciones" class="btn btn-secondary me-2">Mis Suscripciones</a>
-                            <a href="/facturas" class="btn btn-info">Facturación</a>
+                <div style="padding: 1.5rem;">
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--surface2); border-radius: 8px;">
+                            <span style="font-weight: 500; color: var(--muted);">Nombre:</span>
+                            <span style="font-weight: 600; color: var(--text);" th:text="${usuario.nombre}"></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--surface2); border-radius: 8px;">
+                            <span style="font-weight: 500; color: var(--muted);">Apellido:</span>
+                            <span style="font-weight: 600; color: var(--text);" th:text="${usuario.apellido}"></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--surface2); border-radius: 8px;">
+                            <span style="font-weight: 500; color: var(--muted);">Email:</span>
+                            <span style="font-weight: 600; color: var(--text);" th:text="${usuario.email}"></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--surface2); border-radius: 8px;">
+                            <span style="font-weight: 500; color: var(--muted);">País:</span>
+                            <span style="font-weight: 600; color: var(--text);" th:text="${usuario.pais}"></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--surface2); border-radius: 8px;">
+                            <span style="font-weight: 500; color: var(--muted);">Fecha de Registro:</span>
+                            <span style="font-weight: 600; color: var(--text);" th:text="${#temporals.format(usuario.fechaRegistro, 'dd/MM/yyyy')}"></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--surface2); border-radius: 8px;">
+                            <span style="font-weight: 500; color: var(--muted);">Estado:</span>
+                            <span th:if="${usuario.activo}" style="background: rgba(16,185,129,0.2); color: var(--success); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500;">Activo</span>
+                            <span th:unless="${usuario.activo}" style="background: rgba(239,68,68,0.2); color: var(--danger); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500;">Inactivo</span>
+                        </div>
+                        <div th:if="${usuario.isAdmin}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(79,110,247,0.1) 100%); border-radius: 8px; border: 1px solid rgba(124,58,237,0.3);">
+                            <span style="font-weight: 500; color: var(--muted);">Rol:</span>
+                            <span style="background: rgba(124,58,237,0.2); color: #c4b5fd; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500;">Administrador</span>
                         </div>
                     </div>
                 </div>
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Acciones Rápidas</h5>
-                        <a href="/planes/seleccionar" class="btn btn-outline-primary me-2">Seleccionar Plan</a>
-                        <a href="/usuarios/configuracion" class="btn btn-outline-secondary">Configuración</a>
+            </div>
+
+            <!-- Panel de Bienvenida y Acciones -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div class="card">
+                    <div class="card-header">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                           
+                            <h3 class="card-title" style="margin: 0;">¡Bienvenido de vuelta, <span th:text="${usuario.nombre}" style="color: var(--accent);"></span>!</h3>
+                        </div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <p style="color: var(--muted); margin-bottom: 1.5rem;">Tu cuenta está <span th:if="${usuario.activo}" style="color: var(--success); font-weight: 600;">activa</span><span th:unless="${usuario.activo}" style="color: var(--danger); font-weight: 600;">inactiva</span> y lista para usar.</p>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                            <a href="/planes" class="btn btn-primary">Ver Planes</a>
+                            <a href="/suscripciones" class="btn btn-secondary">Mis Suscripciones</a>
+                            <a href="/facturas" class="btn btn-outline">Facturación</a>
+                            <a href="/usuarios/configuracion" class="btn btn-outline">Configuración</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones Rápidas -->
+                <div class="card">
+                    <div class="card-header">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                          
+                            <h3 class="card-title" style="margin: 0;">Acciones Rápidas</h3>
+                        </div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <div style="display: grid; gap: 0.75rem;">
+                            <a href="/planes/seleccionar" class="btn btn-success" style="width: 100%;">Seleccionar Nuevo Plan</a>
+                            <a href="/usuarios/configuracion" class="btn btn-outline" style="width: 100%;">Editar Mi Información</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <div th:replace="fragments/footer :: footer"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
+
+
+
+

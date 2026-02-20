@@ -3,97 +3,576 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Dashboard — ProyectoSpring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0d14;
+            --surface: #111520;
+            --surface2: #161b2e;
+            --border: rgba(255,255,255,0.07);
+            --accent: #4f6ef7;
+            --accent2: #7c3aed;
+            --accent3: #06b6d4;
+            --text: #e8eaf0;
+            --muted: #6b7280;
+            --success: #10b981;
+        }
+
         body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            overflow-x: hidden;
         }
+
+        /* Ambient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(ellipse, rgba(79,110,247,0.12) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -20%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(ellipse, rgba(124,58,237,0.1) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* NAVBAR */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10,13,20,0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .nav-brand {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-brand .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.8); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.25rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 400;
+            padding: 0.4rem 0.85rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover {
+            color: var(--text);
+            background: var(--border);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1.1rem;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--border);
+        }
+        .btn-ghost:hover {
+            color: var(--text);
+            border-color: rgba(255,255,255,0.15);
+            background: var(--surface);
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(79,110,247,0.35);
+        }
+        .btn-primary:hover {
+            background: #6b85f8;
+            box-shadow: 0 4px 28px rgba(79,110,247,0.5);
+            transform: translateY(-1px);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--accent3);
+            border: 1px solid rgba(6,182,212,0.35);
+        }
+        .btn-outline:hover {
+            background: rgba(6,182,212,0.08);
+            border-color: var(--accent3);
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background: var(--surface2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-1px);
+        }
+
+        /* MAIN */
         main {
             flex: 1;
+            position: relative;
+            z-index: 1;
         }
+
+        /* HERO */
+        .hero {
+            padding: 7rem 2rem 5rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeUp 0.7s ease both;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.9rem;
+            background: rgba(79,110,247,0.12);
+            border: 1px solid rgba(79,110,247,0.3);
+            border-radius: 100px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: #a5b4fc;
+            margin-bottom: 2rem;
+            letter-spacing: 0.03em;
+        }
+        .hero-badge .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.25rem;
+            background: linear-gradient(135deg, #fff 40%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--muted);
+            font-weight: 300;
+            line-height: 1.7;
+            max-width: 520px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* STATS BAR */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            padding: 2rem;
+            margin: 0 2rem 4rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeUp 0.7s 0.1s ease both;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 0.2rem;
+        }
+        .stat-divider {
+            width: 1px;
+            background: var(--border);
+            align-self: stretch;
+        }
+
+        /* FEATURE CARDS */
+        .cards-section {
+            padding: 0 2rem 5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            color: var(--text);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.25rem;
+            animation: fadeUp 0.7s 0.2s ease both;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--card-accent, var(--accent)), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .card:hover {
+            border-color: rgba(255,255,255,0.12);
+            background: var(--surface2);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .card:hover::before { opacity: 1; }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 1.25rem;
+        }
+        .icon-blue  { background: rgba(79,110,247,0.15); --card-accent: var(--accent); }
+        .icon-purple{ background: rgba(124,58,237,0.15); --card-accent: var(--accent2); }
+        .icon-cyan  { background: rgba(6,182,212,0.15);  --card-accent: var(--accent3); }
+
+        .card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            color: var(--text);
+        }
+        .card p {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.65;
+            margin-bottom: 1.5rem;
+        }
+
+        /* BOTTOM SECTION */
+        .bottom-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            padding: 0 2rem 5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            animation: fadeUp 0.7s 0.3s ease both;
+        }
+
+        .features-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+        .features-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            color: var(--text);
+        }
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 0.875rem;
+            color: var(--muted);
+        }
+        .feature-check {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            background: rgba(16,185,129,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--success);
+            flex-shrink: 0;
+        }
+
+        .cta-card {
+            background: linear-gradient(135deg, rgba(79,110,247,0.15) 0%, rgba(124,58,237,0.15) 100%);
+            border: 1px solid rgba(79,110,247,0.25);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .cta-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+        .cta-card p {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.65;
+            margin-bottom: 1.5rem;
+        }
+        .admin-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.7rem;
+            background: rgba(124,58,237,0.2);
+            border: 1px solid rgba(124,58,237,0.35);
+            border-radius: 100px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: #c4b5fd;
+            margin-bottom: 0.75rem;
+            width: fit-content;
+        }
+
+        /* FOOTER */
         footer {
-            background-color: #f8f9fa;
-            border-top: 1px solid #dee2e6;
-            padding: 2rem 0;
-            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--muted);
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-section { grid-template-columns: 1fr; }
+            .stats-bar { gap: 1.5rem; }
+            .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav th:replace="fragments/navbar :: nav"></nav>
 
-    <!-- Main Content -->
-    <main class="container py-5">
-        <div class="text-center mb-5">
-            <h1 class="display-4">Bienvenido a ProyectoSpring</h1>
-            <p class="lead">Tu plataforma de suscripciones y gestión de servicios</p>
+    <!-- NAVBAR -->
+    <nav th:replace="~{fragments/navbar :: nav}"></nav>
+
+    <main>
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-badge">
+                <span class="status-dot"></span>
+                Plataforma activa y disponible
+            </div>
+            <h1>Tu plataforma de<br>suscripciones inteligente</h1>
+            <p>Gestiona planes, facturas y suscripciones desde un solo lugar. Simple, transparente y siempre disponible.</p>
+            <div class="hero-cta">
+                <a href="/planes" class="btn btn-primary">Ver planes disponibles</a>
+                <a href="/suscripciones" class="btn btn-ghost">Mis suscripciones</a>
+            </div>
+        </section>
+
+        <!-- STATS -->
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">Uptime garantizado</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Soporte disponible</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Planes flexibles</div>
+            </div>
         </div>
 
-        <div class="row mb-5">
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Planes Flexibles</h5>
-                        <p class="card-text">Elige el plan que mejor se adapte a tus necesidades. Desde opciones básicas hasta premium con todas las funcionalidades.</p>
-                        <a href="/planes" class="btn btn-primary">Ver Planes</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Gestión de Suscripciones</h5>
-                        <p class="card-text">Administra todas tus suscripciones desde un solo lugar. Cambia, cancela o renueva con facilidad.</p>
-                        <a href="/suscripciones" class="btn btn-secondary">Mis Suscripciones</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Facturación Transparente</h5>
-                        <p class="card-text">Revisa tus facturas, historial de pagos y estados de cuenta de manera clara y organizada.</p>
-                        <a href="/facturas" class="btn btn-info">Ver Facturas</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- FEATURE CARDS -->
+        <section class="cards-section">
+            <div class="section-label">Funcionalidades principales</div>
+            <div class="section-title">Todo lo que necesitas</div>
+            <div class="cards-grid">
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">¿Por qué elegirnos?</h5>
-                        <ul class="list-unstyled">
-                            <li>✓ Planes personalizados para cada necesidad</li>
-                            <li>✓ Soporte 24/7</li>
-                            <li>✓ Seguridad garantizada</li>
-                            <li>✓ Fácil gestión desde cualquier dispositivo</li>
-                            <li>✓ Renovaciones automáticas</li>
-                        </ul>
-                    </div>
+                <div class="card icon-blue">
+                    
+                    <h3>Planes Flexibles</h3>
+                    <p>Elige el plan que mejor se adapte a tus necesidades. Desde opciones básicas hasta premium con todas las funcionalidades.</p>
+                    <a href="/planes" class="btn btn-primary">Ver Planes </a>
+                </div>
+
+                <div class="card icon-purple">
+                    
+                    <h3>Gestión de Suscripciones</h3>
+                    <p>Administra todas tus suscripciones desde un solo lugar. Cambia, cancela o renueva con facilidad y sin complicaciones.</p>
+                    <a href="/suscripciones" class="btn btn-secondary">Mis Suscripciones</a>
+                </div>
+
+                <div class="card icon-cyan">
+                  
+                    <h3>Facturación Transparente</h3>
+                    <p>Revisa tus facturas, historial de pagos y estados de cuenta de manera clara, organizada y accesible en todo momento.</p>
+                    <a href="/facturas" class="btn btn-outline">Ver Facturas</a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BOTTOM -->
+        <section class="bottom-section">
+
+            <div class="features-card">
+                <h3>¿Por qué elegirnos?</h3>
+                <ul class="feature-list">
+                    <li><span class="feature-check">✓</span> Planes personalizados para cada necesidad</li>
+                    <li><span class="feature-check">✓</span> Soporte técnico 24/7 sin interrupciones</li>
+                    <li><span class="feature-check">✓</span> Seguridad garantizada en cada operación</li>
+                    <li><span class="feature-check">✓</span> Gestión fácil desde cualquier dispositivo</li>
+                    <li><span class="feature-check">✓</span> Renovaciones automáticas sin preocupaciones</li>
+                </ul>
+            </div>
+
+            <div class="cta-card">
+                <div>
+                    <div class="admin-tag">Faclidades</div>
+                    <h3>Pago seguros</h3>
+                    <p>Pago seguro y protegido con múltiples métodos de pago disponibles.</p>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Información Adicional</h5>
-                        <p>Accede a tu perfil para gestionar tu información personal y preferencias.</p>
-                        <p>Si eres administrador, tienes acceso a herramientas de auditoría y gestión avanzada.</p>
-                        <a href="/usuarios/perfil" class="btn btn-outline-primary">Ir a Mi Perfil</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+        </section>
+
     </main>
 
-    <!-- Footer -->
-    <div th:replace="fragments/footer :: footer"></div>
+    <!-- FOOTER -->
+    <div th:replace="~{fragments/footer :: footer}">
+        <footer>
+            <p>© 2025 ProyectoSpring · Todos los derechos reservados</p>
+        </footer>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+
+
+
