@@ -33,5 +33,7 @@ public interface FacturaRepository extends JpaRepository<Factura, Long> {
 
     List<Factura> findByMontoTotalLessThanEqual(java.math.BigDecimal hasta);
     
+    List<Factura> findBySuscripcionId(Long suscripcionId);
+    
     List<Factura> findBySuscripcionAndEstado(Suscripcion suscripcion, EstadoFactura estado);
 }

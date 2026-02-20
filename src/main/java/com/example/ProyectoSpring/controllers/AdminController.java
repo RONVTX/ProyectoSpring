@@ -3,6 +3,7 @@ package com.example.ProyectoSpring.controllers;
 
 import com.example.ProyectoSpring.entities.Factura;
 import com.example.ProyectoSpring.entities.Suscripcion;
+import com.example.ProyectoSpring.entities.Usuario;
 import com.example.ProyectoSpring.repositories.FacturaRepository;
 import com.example.ProyectoSpring.repositories.SuscripcionRepository;
 import com.example.ProyectoSpring.repositories.UsuarioRepository;
@@ -61,8 +62,10 @@ public class AdminController {
     public String verAuditoria(Model model) {
         List<Factura> facturas = facturaRepository.findAll();
         List<Suscripcion> suscripciones = suscripcionRepository.findAll();
+        List<Usuario> usuarios = usuarioRepository.findAll();
         model.addAttribute("facturas", facturas);
         model.addAttribute("suscripciones", suscripciones);
+        model.addAttribute("usuarios", usuarios);
         return "admin/auditoria";
     }
 
@@ -97,7 +100,16 @@ public class AdminController {
     }
 
     @PostMapping("/auditoria/suscripciones/{id}/eliminar")
-    public String eliminarSuscripcion(@PathVariable Long id) {
+    public String eliminarSuscripcion(@PathVariable Long id, Model model) {
+        // Verificar si la suscripción tiene facturas asociadas
+        if (!facturaRepository.findBySuscripcionId(id).isEmpty()) {
+            model.addAttribute("error", "No se puede eliminar la suscripción porque tiene facturas asociadas");
+            Suscripcion suscripcion = suscripcionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Suscripción no encontrada"));
+            model.addAttribute("suscripcion", suscripcion);
+            return "admin/suscripcion-detalle";
+        }
+
         suscripcionRepository.deleteById(id);
         return "redirect:/admin/auditoria/suscripciones";
     }
@@ -108,5 +120,40 @@ public class AdminController {
         List<Suscripcion> historial = suscripcionRepository.findByUsuarioId(usuarioId);
         model.addAttribute("historial", historial);
         return "admin/historial-suscripcion";
+    }
+
+    // Editar usuario desde auditoría
+    @GetMapping("/auditoria/usuarios/{id}/editar")
+    public String editarUsuario(@PathVariable Long id, Model model) {
+        Usuario usuario = usuarioRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        model.addAttribute("usuario", usuario);
+        return "admin/usuario-editar";
+    }
+
+    // Actualizar usuario desde auditoría
+    @PostMapping("/auditoria/usuarios/{id}/editar")
+    public String actualizarUsuario(@PathVariable Long id, @ModelAttribute Usuario usuario) {
+        usuario.setId(id);
+        usuarioRepository.save(usuario);
+        return "redirect:/admin/auditoria";
+    }
+
+    // Eliminar usuario desde auditoría
+    @PostMapping("/auditoria/usuarios/{id}/eliminar")
+    public String eliminarUsuario(@PathVariable Long id, Model model) {
+        try {
+            usuarioService.eliminarUsuario(id);
+            return "redirect:/admin/auditoria";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            List<Factura> facturas = facturaRepository.findAll();
+            List<Suscripcion> suscripciones = suscripcionRepository.findAll();
+            List<Usuario> usuarios = usuarioRepository.findAll();
+            model.addAttribute("facturas", facturas);
+            model.addAttribute("suscripciones", suscripciones);
+            model.addAttribute("usuarios", usuarios);
+            return "admin/auditoria";
+        }
     }
 }

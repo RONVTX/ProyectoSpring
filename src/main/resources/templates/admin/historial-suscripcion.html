@@ -21,7 +21,7 @@
 
             <div th:if="${historial.isEmpty()}" class="empty-state">
                 <div class="empty-state-content">
-                    <div class="empty-icon">📋</div>
+        
                     <h3>No hay historial</h3>
                     <p>Este usuario no tiene suscripciones registradas en el historial.</p>
                 </div>
@@ -29,7 +29,7 @@
 
             <div th:unless="${historial.isEmpty()}" class="modern-card">
                 <div class="card-header">
-                    <h3 class="card-title">📊 Historial Completo</h3>
+                    <h3 class="card-title">Historial Completo</h3>
                 </div>
                 <div class="card-content">
                     <div class="modern-table-container">
@@ -62,7 +62,7 @@
             </div>
 
             <div class="form-actions">
-                <a href="/admin/auditoria" class="btn-secondary">← Volver a Auditoría</a>
+                <a href="/admin/auditoria" class="btn btn-secondary">Volver a Auditoría</a>
             </div>
         </div>
     </main>

@@ -19,6 +19,12 @@
                 <p class="page-subtitle">ID: <span th:text="${suscripcion.id}"></span></p>
             </div>
 
+            <!-- Mensaje de error -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error:</strong> <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
             <div class="subscription-details-grid">
                 <div class="modern-card">
                     <div class="card-header">

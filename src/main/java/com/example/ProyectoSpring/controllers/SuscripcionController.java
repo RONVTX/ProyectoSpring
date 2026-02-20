@@ -75,7 +75,7 @@ public class SuscripcionController {
         }
     }
 
-    @GetMapping("/{id}/cancelar")
+    @GetMapping("/{id}/confirmar-cancelacion")
     public String mostrarConfirmacionCancelacion(@PathVariable Long id, Model model) {
         Suscripcion suscripcion = suscripcionService.obtenerPorId(id)
                 .orElseThrow(() -> new IllegalArgumentException("Suscripción no encontrada"));
@@ -83,7 +83,7 @@ public class SuscripcionController {
         return "suscripciones/confirmar-cancelacion";
     }
 
-    @PostMapping("/{id}/cancelar")
+    @PostMapping("/{id}/confirmar-cancelacion")
     public String cancelarSuscripcion(@PathVariable Long id) {
         suscripcionService.cancelarSuscripcion(id);
         return "redirect:/suscripciones/" + id + "?cancelada=true";

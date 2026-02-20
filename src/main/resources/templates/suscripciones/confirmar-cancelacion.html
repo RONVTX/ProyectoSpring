@@ -21,17 +21,17 @@
 
             <div class="modern-card warning-card">
                 <div class="card-header">
-                    <h3 class="card-title">⚠️ Advertencia</h3>
+                    <h3 class="card-title">Advertencia</h3>
                 </div>
                 <div class="card-content">
                     <div class="warning-message">
                         <p>Esta acción cancelará tu suscripción permanentemente. Perderás acceso a todos los beneficios asociados con este plan.</p>
                         <p><strong>¿Deseas continuar?</strong></p>
                     </div>
-                    <form th:action="@{/suscripciones/{id}/cancelar(id=${suscripcion.id})}" method="post" class="modern-form">
+                    <form th:action="@{/suscripciones/{id}/confirmar-cancelacion(id=${suscripcion.id})}" method="post" class="modern-form">
                         <div class="form-actions">
-                            <button type="submit" class="btn-danger">Sí, Cancelar Suscripción</button>
-                            <a th:href="@{/suscripciones/{id}(id=${suscripcion.id})}" class="btn-secondary">No, Mantener Suscripción</a>
+                            <button type="submit" class="btn btn-danger">Sí, Cancelar Suscripción</button>
+                            <a th:href="@{/suscripciones/{id}(id=${suscripcion.id})}" class="btn btn-secondary">No, Mantener Suscripción</a>
                         </div>
                     </form>
                 </div>
